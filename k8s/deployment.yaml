@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample-docker-react
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sample-docker-react
+  template:
+    metadata:
+      labels:
+        app: sample-docker-react
+    spec:
+      containers:
+      - name: sample-docker-react
+        image: demo
+        ports:
+        - containerPort: 3000

@@ -1,17 +1,21 @@
-# Specify the language/environment
-language: minimal
+language: bash
 
-# Use Docker services
 services:
   - docker
-jobs:
-  include:
-    - stage: build
-      name: Build Docker Image
-      script:
-        # Navigate to the cloned private repo and build the Docker image
-        - cd tikton
-        - docker build -t app1:latest .
 
+before_install:
+  # Start Minikube and configure Docker to use Minikube’s Docker daemon
+  - minikube start --driver=docker
+  - eval $(minikube -p minikube docker-env)
 
+  # Build Docker image for the application using Minikube's Docker daemon
+  - docker build -t sample-docker-react  .
 
+deploy:
+  # Deploy to Minikube
+  provider: script
+  script:
+    - kubectl apply -f k8s/deployment.yaml
+    - kubectl apply -f k8s/service.yaml
+  on:
+    branch: master
