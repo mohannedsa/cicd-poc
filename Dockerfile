@@ -8,7 +8,7 @@ WORKDIR /app/app
 COPY . /app/app
 
 # Install any needed packages specified in requirements.txt
-RUN pip install flask
+RUN pip3 install flask
 
 # Make port 80 available to the world outside this container
 EXPOSE 80
