@@ -4,8 +4,6 @@ language: minimal
 # Use Docker services
 services:
   - docker
-
-
 jobs:
   include:
     - stage: build
@@ -15,12 +13,5 @@ jobs:
         - cd tikton
         - docker build -t app1:latest .
 
-    - stage: deploy
-      name: Push Docker Image to DockerHub
-      if: branch = main  # Only push to DockerHub from the main branch
-      script:
-        # Log in to DockerHub using environment variables for username and password
-        - docker tag app1:latest mohannedsa/app1:latest
-        - docker push mohannedsa/app1:latest
 
 
