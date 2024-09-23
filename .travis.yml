@@ -28,6 +28,5 @@ jobs:
 env:
   global:
     - DOCKER_USERNAME=mohannedsa
-    - DOCKER_PASSWORD=wersdf123
-    #- secure: <your encrypted DOCKER_PASSWORD>  # Use Travis CI's encryption for the Docker password
+    - secure: wersdf123  # Use Travis CI's encryption for the Docker password
 
