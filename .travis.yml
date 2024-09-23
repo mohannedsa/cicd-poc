@@ -3,16 +3,33 @@ language: bash
 services:
   - docker
 
-before_install:
-  # Start Minikube and configure Docker to use Minikube’s Docker daemon
-  - minikube start --driver=docker
-  - eval $(minikube -p minikube docker-env)
+env:
+  global:
+    - MINIKUBE_VERSION=v1.25.2
+    - KUBECTL_VERSION=v1.23.0
 
-  # Build Docker image for the application using Minikube's Docker daemon
+before_install:
+  # Install Minikube
+  - curl -Lo minikube https://storage.googleapis.com/minikube/releases/${MINIKUBE_VERSION}/minikube-linux-amd64
+  - chmod +x minikube
+  - sudo mv minikube /usr/local/bin/
+
+  # Install kubectl
+  - curl -LO "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl"
+  - chmod +x kubectl
+  - sudo mv kubectl /usr/local/bin/
+
+  # Start Minikube
+  - minikube start --driver=docker
+
+  # Set up Docker environment to use Minikube's Docker daemon
+  - eval $(minikube docker-env)
+
+  # Build the Docker image inside Minikube
   - docker build -t sample-docker-react  .
 
+
 deploy:
-  # Deploy to Minikube
   provider: script
   script:
     - kubectl apply -f k8s/deployment.yaml
