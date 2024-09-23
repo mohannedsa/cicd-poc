@@ -20,13 +20,7 @@ jobs:
       if: branch = main  # Only push to DockerHub from the main branch
       script:
         # Log in to DockerHub using environment variables for username and password
-        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
         - docker tag app1:latest mohannedsa/app1:latest
         - docker push mohannedsa/app1:latest
 
-# Define environment variables (GITHUB_TOKEN, DOCKER_USERNAME, DOCKER_PASSWORD) in Travis CI
-env:
-  global:
-    - DOCKER_USERNAME=mohannedsa
-    - secure: wersdf123  # Use Travis CI's encryption for the Docker password
 
