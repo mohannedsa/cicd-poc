@@ -5,10 +5,6 @@ language: minimal
 services:
   - docker
 
-# Before the build, clone the private repository using GitHub token
-before_install:
-  # Clone the private repository using the GitHub token
-  - git clone https://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:@github.com/runtest1122/tikton.git
 
 jobs:
   include:
