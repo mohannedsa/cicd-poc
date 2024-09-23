@@ -1,8 +1,37 @@
-language: node_js
-node_js:
-  - "stable"
-cache:
-  directories:
-    - "node_modules"
-script:
-  - npm test
+# Specify the language/environment
+language: minimal
+
+# Use Docker services
+services:
+  - docker
+
+# Before the build, clone the private repository using GitHub token
+before_install:
+  # Clone the private repository using the GitHub token
+  - git clone https://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:@github.com/runtest1122/tikton.git
+
+jobs:
+  include:
+    - stage: build
+      name: Build Docker Image
+      script:
+        # Navigate to the cloned private repo and build the Docker image
+        - cd tikton
+        - docker build -t app1:latest .
+
+    - stage: deploy
+      name: Push Docker Image to DockerHub
+      if: branch = main  # Only push to DockerHub from the main branch
+      script:
+        # Log in to DockerHub using environment variables for username and password
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        - docker tag app1:latest mohannedsa/app1:latest
+        - docker push mohannedsa/app1:latest
+
+# Define environment variables (GITHUB_TOKEN, DOCKER_USERNAME, DOCKER_PASSWORD) in Travis CI
+env:
+  global:
+    - DOCKER_USERNAME=mohannedsa
+    - DOCKER_PASSWORD=wersdf123
+    #- secure: <your encrypted DOCKER_PASSWORD>  # Use Travis CI's encryption for the Docker password
+
